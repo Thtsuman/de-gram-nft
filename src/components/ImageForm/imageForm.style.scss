@@ -1,0 +1,22 @@
+.img-preview {
+    position: relative;
+
+    .img-wrapper {
+        margin: 10px 0px;
+        object-fit: cover;
+        width: 100%;
+        height: 200px;
+    }
+    
+    .image-close-btn {
+        position: absolute;
+        right: -5px;
+        top: 5px;
+        font-size: 1.2rem;
+        color: red;
+        background: white;
+        border-radius: 50%;
+        cursor: pointer;
+        border: 1px solid red;
+    }
+}
