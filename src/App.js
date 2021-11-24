@@ -47,6 +47,7 @@ const App = () => {
     if (networkData) {
       // create contract
       const degram = new web3.eth.Contract(Degram.abi, networkData.address)
+      // const degram = new web3.eth.Contract(Degram.abi, '0x11f9977F6EE919458539ba6EDC5980Da43Fb795D')
       setDegramContract(degram)
     } else {
       window.alert('Degram contract is not deployed in detected network')
@@ -158,12 +159,12 @@ const App = () => {
                         className="btn btn-outline-success btn-sm float-right pt-0"
                         type="button"
                         onClick={() => {
-                          let tipAmount = window.web3.utils.toWei('1', 'Ether')
+                          let tipAmount = window.web3.utils.toWei('0.1', 'Ether')
                           console.log(image.id, tipAmount)
                           tipImageOwner(image.id, tipAmount)
                         }}
                       >
-                        TIP 1 ETH
+                        TIP 0.1 ETH
                       </button>
                     </li>
                   </ul>
