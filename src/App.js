@@ -54,6 +54,7 @@ const App = () => {
   }
 
   const getImagesFromBlockchain = async () => {
+    setLoadingState('loading...')
     if (degramContract) {
       const imageCount = await degramContract.methods.imageCount().call();
       setTotalImageCount(imageCount)
@@ -68,7 +69,6 @@ const App = () => {
       setImages(images)
 
       setLoadingState('loaded')
-      getImagesFromBlockchain()
     }
   }
 
@@ -80,6 +80,16 @@ const App = () => {
     degramContract.methods.uploadImage(imgHash, imgDescription)
       .send({ from: account })
       .on('transactionHash', (hash) => {
+        setLoadingState('loaded')
+        getImagesFromBlockchain()
+      })
+  }
+
+  const tipImageOwner = (imageId, tipAmount) => {
+    degramContract.methods.tipImageOwner(imageId)
+      .send({ from: account, value: tipAmount })
+      .on('transactionHash', (hash) => {
+        getImagesFromBlockchain()
         setLoadingState('loaded')
       })
   }
@@ -124,9 +134,9 @@ const App = () => {
             {images?.map((image, key) => {
               return (
                 <div className="card my-4" key={key} >
-                  <div className="card-header">
+                  <div className="card-header d-flex align-items-center">
                     <Identicon className="custom-identicon" string={image.author} />
-                    <small className="text-muted">{image.author}</small>
+                    <small className="badge text-muted">{image.author}</small>
                   </div>
                   <ul id="imageList" className="list-group list-group-flush">
                     <li className="list-group-item">
@@ -140,22 +150,22 @@ const App = () => {
                       </p>
                       <p>{image.description}</p>
                     </li>
-                    {/* <li key={key} className="list-group-item py-2">
-                    <small className="float-left mt-1 text-muted">
-                      TIPS: {window.web3.utils.fromWei(image.tipAmount.toString(), 'Ether')} ETH
-                    </small>
-                    <button
-                      className="btn btn-link btn-sm float-right pt-0"
-                      name={image.id}
-                      onClick={(event) => {
-                        // let tipAmount = window.web3.utils.toWei('0.1', 'Ether')
-                        // console.log(event.target.name, tipAmount)
-                        // this.props.tipImageOwner(event.target.name, tipAmount)
-                      }}
-                    >
-                      TIP 0.1 ETH
-                    </button>
-                  </li> */}
+                    <li key={key} className="list-group-item py-2 d-flex align-items-center justify-content-between">
+                      <small className="float-left text-muted">
+                        TIPS: {window.web3.utils.fromWei(image.tipAmount.toString(), 'Ether')} ETH
+                      </small>
+                      <button
+                        className="btn btn-outline-success btn-sm float-right pt-0"
+                        type="button"
+                        onClick={() => {
+                          let tipAmount = window.web3.utils.toWei('1', 'Ether')
+                          console.log(image.id, tipAmount)
+                          tipImageOwner(image.id, tipAmount)
+                        }}
+                      >
+                        TIP 1 ETH
+                      </button>
+                    </li>
                   </ul>
                 </div>
               )
