@@ -42,11 +42,19 @@ const App = () => {
 
     // network id
     const networkId = await web3.eth.net.getId();
+    // it will detect networkId of your 
+    // deployed contract from the abi itself
     const networkData = Degram.networks[networkId];
 
     if (networkData) {
       // create contract
+      /*
+        here replace the abi
+        with your own abi
+        imported
+      */
       const degram = new web3.eth.Contract(Degram.abi, networkData.address)
+      // or you can add address manually
       // const degram = new web3.eth.Contract(Degram.abi, '0x11f9977F6EE919458539ba6EDC5980Da43Fb795D')
       setDegramContract(degram)
     } else {
@@ -73,8 +81,16 @@ const App = () => {
     }
   }
 
-  const uploadImageToBlockChain = (imgState) => {
-    const { imgHash, imgDescription } = imgState;
+  const uploadImageToBlockChain = (formState) => {
+    // you will get all the values
+    // on the form in the "formState" variable
+    console.log(formState)
+
+    /*
+      call your contract instead of uploadImage function below
+    */
+
+    const { imgHash, imgDescription } = formState;
 
     setLoadingState('uploading-image')
 
